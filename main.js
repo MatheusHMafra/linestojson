@@ -1,21 +1,8 @@
-// Auto convert lines to json
-// Like this:
-/*
-BepInEx-BepInExPack-5.4.2100
-notnotnotswipez-MoreCompany-1.7.4
-x753-More_Suits-1.4.1
-Sligili-More_Emotes-1.3.3
-*/
-// To this:
-/*
-"BepInEx-BepInExPack-5.4.2100",
-"notnotnotswipez-MoreCompany-1.7.4",
-"x753-More_Suits-1.4.1",
-"Sligili-More_Emotes-1.3.3"
-*/
-
 document.getElementById("convert").addEventListener("click", function () {
     var text = document.getElementById("text").value;
+    if (text == "") {
+        return;
+    }
     var result = document.getElementById("result");
     var lines = text.split("\n");
     var converted = "";
@@ -28,23 +15,33 @@ document.getElementById("convert").addEventListener("click", function () {
         }
     }
     result.innerHTML = converted;
-    document.getElementById("message").style.display = "none";
+    //document.getElementById("message").style.display = "none";
 });
 
+/* Clipboard API doesn't work that well
 // Click to copy
 document.getElementById("result").addEventListener("click", function () {
     var result = document.getElementById("result");
     if (result.innerHTML == "") {
         return;
     }
-    var range = document.createRange();
-    range.selectNode(result);
-    window.getSelection().addRange(range);
-    document.execCommand("copy");
-    window.getSelection().removeAllRanges();
-    document.getElementById("message").style.display = "block";
-    document.getElementById("message").innerHTML = "Copied!";
+    // Verificando se navigator.clipboard está disponível
+    if (navigator.clipboard) {
+        // Usando navigator.clipboard.writeText para copiar o texto do elemento
+        navigator.clipboard.writeText(result.innerText).then(() => {
+            // Mostrando a mensagem de sucesso
+            document.getElementById("message").style.display = "block";
+            document.getElementById("message").innerHTML = "Copied!";
+        }).catch(err => {
+            // Tratamento de erro, caso a cópia não seja bem-sucedida
+            console.error('Error copying text: ', err);
+        });
+    } else {
+        // Opção de fallback ou mensagem para o usuário caso navigator.clipboard não esteja disponível
+        console.error('Clipboard API not available.');
+    }
 });
+*/
 
 // Click to clear
 document.getElementById("clear").addEventListener("click", function () {
